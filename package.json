@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "engines": {
     "node": "8.2.x"
-  }
+  },
   "description": "Sample OpenID Connect Web Server",
   "private": true,
   "main": "server.js",
