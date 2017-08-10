@@ -33,7 +33,7 @@ var argv = yargs
       alias: ['iss', 'orgUrl']
     },
     audience: {
-      description: 'Acceess Token Audience URI',
+      description: 'Access Token Audience URI',
       required: true,
       alias: ['aud', 'clientId']
     },
@@ -50,7 +50,7 @@ var argv = yargs
       alias: 'ssws',
     },
     authzIssuer: {
-      description: 'Alternate Authorization URL to use',
+      description: 'Alternate Authorization URL',
     },
     idp: {
       description: 'Okta ID for the Social IdP',
@@ -89,6 +89,8 @@ const sessionHandler = require('express-session')({
   saveUninitialized: true
 });
 
+app.enable('trust proxy');
+
 /**
  * Middleware
  */
@@ -107,6 +109,16 @@ app.use(passport.initialize());
 app.get('/js/config.js', sessionHandler, function(req, res, next) {
   res.setHeader('Content-Type', 'application/javascript');
   return res.render('config', {argv: argv});
+});
+
+app.get('/welcome', sessionHandler, function(req, res, next) {
+  var thisAppUrl = req.protocol + "://" + req.headers.host
+  
+  return res.render('welcome', {
+    thisAppUrl: thisAppUrl,
+    oktaAdminOrg: argv.issuer.replace('.', '-admin.'),
+    argv: argv
+  });
 });
 
 app.get('/social/callback', sessionHandler, function(req, res, next) {
@@ -242,11 +254,3 @@ request({
   });
 
 });
-
-
-
-
-
-
-
-
