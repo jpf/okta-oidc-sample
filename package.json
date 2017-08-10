@@ -8,7 +8,7 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node server.js | bunyan -o short"
+    "start": "node server.js --config config.json | bunyan -o short"
   },
   "author": "Karl McGuinness",
   "license": "MIT",
