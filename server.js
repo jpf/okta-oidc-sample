@@ -11,7 +11,7 @@ const helmet = require('helmet');
 const passport = require('passport');
 const JwtBearerStrategy = require('passport-oauth2-jwt-bearer').Strategy;
 const request = require('request');
-const OktaConfig = require('./js/config');
+const OktaConfig = require('./config');
 
 /**
  * Arguments
@@ -54,16 +54,18 @@ var argv = yargs
     }
   })
   .example('\t$0 --iss https://example.okta.com --aud ANRZhyDh8HBFN5abN6Rg', '')
+  .env('')
   .argv;
-
-const issuerUrl = url.parse(argv.issuer);
-const metadataUrl = argv.issuer + '/.well-known/openid-configuration';
-const orgUrl = issuerUrl.protocol + '//' + issuerUrl.host + (issuerUrl.port ? ':' + issuerUrl.port : '');
 
 console.log();
 console.log('Listener Port:\n\t' + argv.port);
 console.log('Issuer URL:\n\t' + argv.issuer);
 console.log('Audience URI:\n\t' + argv.audience);
+
+const issuerUrl = url.parse(argv.issuer);
+const metadataUrl = argv.issuer + '/.well-known/openid-configuration';
+const orgUrl = issuerUrl.protocol + '//' + issuerUrl.host + (issuerUrl.port ? ':' + issuerUrl.port : '');
+
 console.log('Metadata URL:\n\t' + metadataUrl);
 console.log('Organization URL:\n\t' + orgUrl);
 console.log();
@@ -97,6 +99,11 @@ app.use(passport.initialize());
 /**
  * Routes
  */
+
+app.get('/js/config.js', sessionHandler, function(req, res, next) {
+  res.setHeader('Content-Type', 'application/javascript');
+  return res.render('config', {argv: argv});
+});
 
 app.get('/social/callback', sessionHandler, function(req, res, next) {
   const txId = req.query.tx_id;
