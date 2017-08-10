@@ -1,9 +1,8 @@
 (define([], {
-  orgUrl: '<%- argv.iss %>',
-  apiToken: 'XXXXXXXXX',
-  authzIssuer: 'https://example.oktapreview.com/oauth2/aus8q4gst8vbUGzFp0h7',
-  clientId: '<%- argv.aud %>',
-  idp: '0oa4ftg4vzKlWHHEJ0h7',
-  scopes: ['openid', 'email', 'profile', 'phone', 'address', 'groups'],
-  protectedScope: 'api:read'
+  orgUrl: '<%- argv.issuer %>',
+  clientId: '<%- argv.audience %>',
+  authzIssuer: '<%- argv.authzIssuer %>',
+  idp: '<%- argv.idp %>',
+  scopes: <%- JSON.stringify(argv.widgetScopes) %>,
+  protectedScope: '<%- argv.protectedScope %>'
 }));

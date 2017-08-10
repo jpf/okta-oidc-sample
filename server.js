@@ -11,7 +11,6 @@ const helmet = require('helmet');
 const passport = require('passport');
 const JwtBearerStrategy = require('passport-oauth2-jwt-bearer').Strategy;
 const request = require('request');
-const OktaConfig = require('./config');
 
 /**
  * Arguments
@@ -31,28 +30,33 @@ var argv = yargs
     issuer: {
       description: 'Access Token Issuer URL',
       required: true,
-      alias: 'iss',
-      default: OktaConfig.orgUrl
+      alias: ['iss', 'orgUrl']
     },
     audience: {
       description: 'Acceess Token Audience URI',
       required: true,
-      alias: 'aud',
-      default: OktaConfig.clientId
+      alias: ['aud', 'clientId']
+    },
+    widgetScopes: {
+      array: true,
+      description: 'Scopes for the Okta Sign-In Widget to request'
     },
     scope: {
       description: 'OAuth 2.0 Scope for Protected Resource',
-      required: true,
-      alias: 'scp',
-      default: OktaConfig.resourceScope
+      alias: ['scp', 'protectedScope'],
     },
     apiToken: {
       description: 'Okta Organization SSWS API Token for Social IdP Callbacks',
-      required: true,
       alias: 'ssws',
-      default: OktaConfig.apiToken
+    },
+    authzIssuer: {
+      description: 'Alternate Authorization URL to use',
+    },
+    idp: {
+      description: 'Okta ID for the Social IdP',
     }
   })
+  .config()
   .example('\t$0 --iss https://example.okta.com --aud ANRZhyDh8HBFN5abN6Rg', '')
   .env('')
   .argv;
